@@ -10,7 +10,7 @@ func OpenAI() *config.Rule {
 	r := config.Rule{
 		RuleID:      "openai-api-key",
 		Description: "Found an OpenAI API Key, posing a risk of unauthorized access to AI services and data manipulation.",
-		Regex:       generateUniqueTokenRegex(`sk-[a-zA-Z0-9]{20}T3BlbkFJ[a-zA-Z0-9]{20}`, true),
+		Regex:       generateUniqueTokenRegex(`sk-(proj-)?[a-zA-Z0-9]{20}T3BlbkFJ[a-zA-Z0-9]{20}`, true),
 
 		Keywords: []string{
 			"T3BlbkFJ",
@@ -20,6 +20,7 @@ func OpenAI() *config.Rule {
 	// validate
 	tps := []string{
 		generateSampleSecret("openaiApiKey", "sk-"+secrets.NewSecret(alphaNumeric("20"))+"T3BlbkFJ"+secrets.NewSecret(alphaNumeric("20"))),
+		generateSampleSecret("openaiApiKey", "sk-proj-"+secrets.NewSecret(alphaNumeric("20"))+"T3BlbkFJ"+secrets.NewSecret(alphaNumeric("20"))),
 	}
 	return validate(r, tps, nil)
 }
